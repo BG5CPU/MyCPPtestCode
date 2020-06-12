@@ -60,6 +60,18 @@ int main()
    float avg;
    avg = getAverage(balance, 5);
    cout << "Average value is: " << avg << endl; 
+
+   short Quat;
+   unsigned char qH = 128, qL = 0;
+   Quat = qH << 8 | qL;
+   float Fquat = Quat/32768.0;
+   cout << "Quat is " << Fquat <<endl;
+
+   short Angle;
+   unsigned char aH = 159, aL = 255;
+   Angle = aH << 8 | aL;
+   float Fangle = Angle/32768.0*180.0;
+   cout << "Angle is " << Fangle <<endl;
      
    return 0;
 }
