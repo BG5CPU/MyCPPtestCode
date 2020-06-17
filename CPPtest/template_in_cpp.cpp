@@ -59,6 +59,8 @@ int main(){
     float aa = 2.3, bb = 5.4;
     cout << "Max(aa, bb): " << Max(aa, bb) << endl;
 
+    
+
     try{
         STACK<int> intStack;  // int 类型的栈 
         STACK<string> stringStack;  // string 类型的栈 
