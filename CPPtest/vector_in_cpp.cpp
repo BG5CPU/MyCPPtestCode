@@ -12,6 +12,7 @@ inline T Max(T &a, T &b){
     return a>b ? a:b;
 }
 
+// 有序向量的元素查找 
 template <typename T> static Rank binSearch_B(T* A, T const & e, Rank lo, Rank hi){
     while(1 < hi -lo){
         Rank mi = (lo + hi) >> 1;
@@ -20,6 +21,7 @@ template <typename T> static Rank binSearch_B(T* A, T const & e, Rank lo, Rank h
     return (e == A[lo])? lo : -1;
 }
 
+// 有序向量的元素查找，返回不大于这个元素的最后的位置
 template <typename T> static Rank binSearch_C(T* A, T const & e, Rank lo, Rank hi){
     while(lo < hi){ //不变性: A[0, lo) <= e < A[hi, n)
         Rank mi = (lo + hi) >> 1; // 以中点为轴点，经比较后确定深入
@@ -28,6 +30,7 @@ template <typename T> static Rank binSearch_C(T* A, T const & e, Rank lo, Rank h
     return --lo; 
 }
 
+// 气泡排序
 template <typename T> void bubbleSort_A(T* A, Rank lo, Rank hi){ // [lo, hi)   
     bool sorted = false; // 整体有序标准
     T temp; Rank tempI = lo;
@@ -45,6 +48,7 @@ template <typename T> void bubbleSort_A(T* A, Rank lo, Rank hi){ // [lo, hi)
     }
 }
 
+// 气泡排序改进
 template <typename T> void bubbleSort_B(T* A, Rank lo, Rank hi){ // [lo, hi)   
     Rank last = hi;
     T temp; Rank tempI = lo;
@@ -62,12 +66,46 @@ template <typename T> void bubbleSort_B(T* A, Rank lo, Rank hi){ // [lo, hi)
     }
 }
 
+/*
+template <typename T> void merge(T* E, Rank lo, Rank mi, Rank hi){
+    T* A = E + lo;  // A[0, hi-lo) = E[lo, hi)
+    Rank lb = mi - lo; T* B = new T[lb]; // 前子向量 B[0, lb) = E[lo, mi)
+    for(Rank i = 0; i < lb; B[i++] = A[i]); // 复制前子向量B
+    Rank lc = hi - mi; T* C = E + mi; // 后子向量C[0, lc) = E[mi, hi)
+    for(Rank i=0, j=0, k=0; (j<lb)||(k<lc);){ //B[j]或C[k]中 小者 转至A的末尾
+        if( (j<lb)&&(lc<=k || (B[j]<=C[k])) ) A[i++] = B[j++];
+        if( (k<lc)&&(lb<=j || (C[k]< B[j])) ) A[i++] = C[k++];
+    }
+}
+*/
+template <typename T> void merge(T* E, Rank lo, Rank mi, Rank hi){
+    T* A = E + lo;  // A[0, hi-lo) = E[lo, hi)
+    Rank lb = mi - lo; T* B = new T[lb]; // 前子向量 B[0, lb) = E[lo, mi)
+    for(Rank i = 0; i < lb; B[i++] = A[i]); // 复制前子向量B
+    Rank lc = hi - mi; T* C = E + mi; // 后子向量C[0, lc) = E[mi, hi)
+    for(Rank i=0, j=0, k=0; j<lb;){ //B[j]或C[k]中 小者 转至A的末尾
+        if( lc<=k || (B[j]<=C[k]) )  A[i++] = B[j++];
+        if( (k<lc) && (C[k]< B[j]) ) A[i++] = C[k++];
+    }
+}
 
+// 二分归并排序
+template <typename T> void mergeSort(T* A, Rank lo, Rank hi){ // [lo, hi) 
+    if(hi - lo < 2) return;
+    Rank mi = (lo+hi)>>1;
+    mergeSort(A, lo, mi);
+    mergeSort(A, mi, hi);
+    merge(A, lo, mi, hi); // 归并
+}
+
+// 测试
 int main(){
     static int MAX = 7;
     int testNum[MAX] = {2, 3, 1, 0, 2, 5, 3};
     vector<int> nums(testNum, testNum+MAX);
     cout << nums[1] << endl;
+    // int i = 0;
+    // cout << "test i++" << nums[i++] << endl;
 
     int a = 10, b = 6;
     cout << "Max(a, b): " << Max(a, b) << endl;
@@ -96,6 +134,19 @@ int main(){
     }
     cout << " is sorted array (version B)" << endl;
 
+    int testArray3[MAX] = {2, 1, 3, 4, 0, 5, 6};
+    merge(testArray3, 1, 4, 7);
+    for(int i = 0; i < MAX; i++){
+        cout << testArray3[i] << " ";
+    }
+    cout << " is merged array (version A)" << endl;
+
+    int testArray4[MAX] = {5, 1, 4, 4, 0, 3, 6};
+    mergeSort(testArray4, 0, MAX);
+    for(int i = 0; i < MAX; i++){
+        cout << testArray4[i] << " ";
+    }
+    cout << " is mergeSorted array (version A)" << endl;
 
 }
 
