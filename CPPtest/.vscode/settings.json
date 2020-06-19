@@ -8,6 +8,8 @@
         "string": "cpp",
         "vector": "cpp",
         "string_view": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "list": "cpp",
+        "cstdio": "cpp"
     }
 }
