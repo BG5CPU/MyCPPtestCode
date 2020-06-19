@@ -1,56 +1,10 @@
-#include <iostream>
-#include<vector>
-#include<list>
-#include "ListNode.h"
-using namespace std;
-
-typedef int Rank;
-
-/****************************************
-**ListNode
-****************************************/
-template <typename T>
-Posi(T) ListNode<T>::insertAsPred(T const& e){
-    Posi(T) x = new ListNode(e, pred, this); // 新建一个节点，新节点的pred是this的pred，新节点的succ是this
-    pred->succ = x; // this的pred的succ变为新建节点x
-    pred = x; // this的pred变为新建节点x
-    return x;
-}
-
-template <typename T>
-Posi(T) ListNode<T>::insertAsSucc(T const& e){
-    Posi(T) x = new ListNode(e, this, succ); // 创建节点的耗时较大
-    succ->pred = x;
-    succ = x;
-    return x;
-}
-
-
 /**************************************** 
 **class List
 ****************************************/
-template <typename T>
-class List{
-private:
-    int _size;
-    Posi(T) header; // 头哨兵
-    Posi(T) trailer; // 尾哨兵
 
-protected:
+#include "List.h"
+#include "ListNode.h"
 
-public:
-    ~List();
-    void init();
-    Posi(T) first();
-    T operator[](Rank r) const;
-    Posi(T) find(T const & e, Rank n, Posi(T) p);
-    Posi(T) insertBefore(Posi(T) p, T const& e);
-    Posi(T) insertAfter(Posi(T) p, T const& e);
-    Posi(T) insertAsLast(T const& e);
-    void copyNodes(Posi(T) p, Rank n);
-    T remove(Posi(T) p);
-    int clean();
-};
 
 template <typename T>
 List<T>::~List(){ // 列表析构
@@ -126,18 +80,17 @@ int List<T>::clean(){
     return oldSize;
 } // O(n), 线性正比于列表规模
 
-
-
-
-
-// 测试
-int main(){
-
-    List<int> testList1;
-    
-
+template <typename T>
+int List<T>::deduplicate(){ // 无序向量
+    if(_size < 2) return 0; // 平凡列表自然无重复 //至少存在2个节点
+    int oldSize = _size; // 记录原有规模
+    Posi(T) p = first(); Rank r = 1;
+    while(trailer != (p->succ)){ // 从第二个节点开始 //依次直到末节点
+        Posi(T) q = find(p->data, r, p);
+        q? remove(q) : r++; // 若存在，则删除；否则可递增
+    } // assert: 循环过程中的任意时刻，p的所有前驱互不相同
+    return oldSize-_size; // 列表规模的变化，也就是被删除的元素的总数
 }
-
 
 
 
