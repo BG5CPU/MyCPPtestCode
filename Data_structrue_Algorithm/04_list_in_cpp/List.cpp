@@ -2,6 +2,7 @@
 **class List
 ****************************************/
 
+/*
 #include "List.h"
 #include "ListNode.h"
 
@@ -53,6 +54,11 @@ Posi(T) List<T>::insertAfter(Posi(T) p, T const& e){
 }
 
 template <typename T>
+Posi(T) List<T>::insertAsFirst(T const& e){
+    _size++; return header->insertAsSucc(e);
+}
+
+template <typename T>
 Posi(T) List<T>::insertAsLast(T const& e){
     _size++; return trailer->insertAsPred(e);
 }
@@ -92,6 +98,23 @@ int List<T>::deduplicate(){ // 无序向量
     return oldSize-_size; // 列表规模的变化，也就是被删除的元素的总数
 }
 
+template <typename T>
+int List<T>::uniquify(){
+    if(_size < 2) return 0; // 平凡列表自然无重复 //至少存在2个节点
+    int oldSize = _size; // 记录原有规模
+    Posi(T) p = first(); Posi(T) q; // p为各区段起点，q为p的后继
+    while(trailer != (q = p->succ)){ // 反复考察紧邻的节点对(p, q)
+        if(p->data != q->data) p = q; // 如果互异，指向下一个区域
+        else remove(q); //如果相同，删除后者
+    }
+    return oldSize-_size; // 列表规模的变化，也就是被删除的元素的总数
+}
 
-
+template <typename T>
+Posi(T) List<T>::search(T const & e, Rank n, Posi(T) p) const{ //有序列表，p的前n个(真)前驱中，找到不大于e的最后者
+    while(0<n--)
+        if( ((p = p->pred)->data) <= e ) break; // 逐个比较
+    return p;
+}
+*/
 

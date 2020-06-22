@@ -8,6 +8,8 @@
             "args": [
                 "-g",
                 "${file}",
+                // "${fileDirname}\\List.cpp", //类似添加需要的文件，可进行多文件编译，也可使用makefile
+                // "${fileDirname}\\ListNode.cpp", //类似添加需要的文件，可进行多文件编译，也可使用makefile
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

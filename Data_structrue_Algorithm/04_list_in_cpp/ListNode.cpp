@@ -1,7 +1,7 @@
 /****************************************
 **ListNode
 ****************************************/
-
+/*
 #include "ListNode.h"
 
 template <typename T>
@@ -19,3 +19,4 @@ Posi(T) ListNode<T>::insertAsSucc(T const& e){
     succ = x;
     return x;
 }
+*/

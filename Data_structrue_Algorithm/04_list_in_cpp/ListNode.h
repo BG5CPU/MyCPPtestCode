@@ -1,6 +1,8 @@
 /****************************************
 **ListNode
 ****************************************/
+/*
+#pragma once
 
 #define Posi(T) ListNode<T>*
 
@@ -15,4 +17,4 @@ struct ListNode{ //列表节点模板类(以双向链表形式实现)
     Posi(T) insertAsPred(T const& e);
     Posi(T) insertAsSucc(T const& e);
 };
-
+*/
