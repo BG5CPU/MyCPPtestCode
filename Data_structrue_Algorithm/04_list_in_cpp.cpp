@@ -55,6 +55,7 @@ public:
     ~List();
     void init();
     Posi(T) first();
+    Posi(T) last();
     T operator[](Rank r) const;
     Posi(T) find(T const & e, Rank n, Posi(T) p);
     Posi(T) insertBefore(Posi(T) p, T const& e);
@@ -63,11 +64,12 @@ public:
     Posi(T) insertAsLast(T const& e);
     void copyNodes(Posi(T) p, Rank n);
     T remove(Posi(T) p);
+    Posi(T) selectMax(Posi(T) p, int n); // 从起始于位置p的n个元素中选出最大者
     int clean();
     int deduplicate(); // 无序向量，去重复
     int uniquify(); // 有序向量，成批剔除重复元素
     Posi(T) search(T const & e, Rank n, Posi(T) p) const; // 有序列表，p的前n个(真)前驱中，找到不大于e的最后者
-
+    void selectionSort(Posi(T) p, int n); // 对列表中起始于位置p的连续n个元素做选择排序
 };
 
 /********************member*****************/
@@ -89,6 +91,12 @@ template <typename T>
 Posi(T) List<T>::first(){
     if(header->succ == trailer) return NULL;
     else return header->succ;
+}
+
+template <typename T>
+Posi(T) List<T>::last(){
+    if(trailer->pred == header) return NULL;
+    else return trailer->pred;
 }
 
 template <typename T> // assert: 0 <= r < size
@@ -143,6 +151,16 @@ T List<T>::remove(Posi(T) p){
 }
 
 template <typename T>
+Posi(T) List<T>::selectMax(Posi(T) p, int n){ // 从起始于位置p 后 n个元素中选出最大者(包括p)
+    Posi(T) max = p; //最大者暂定为首节点p
+    for(Posi(T) curr = p; 1<n; n--){
+        if(max->data <= (curr=curr->succ)->data)
+            max = curr; //更新最大元素位置记录
+    }
+    return max;
+}
+
+template <typename T>
 int List<T>::clean(){
     int oldSize = _size;
     while(0 < _size)
@@ -155,7 +173,7 @@ int List<T>::deduplicate(){ // 无序向量
     if(_size < 2) return 0; // 平凡列表自然无重复 //至少存在2个节点
     int oldSize = _size; // 记录原有规模
     Posi(T) p = first(); Rank r = 1;
-    while(trailer != (p->succ)){ // 从第二个节点开始 //依次直到末节点
+    while(trailer != (p = p->succ)){ // 从第二个节点开始 //依次直到末节点
         Posi(T) q = find(p->data, r, p);
         q? remove(q) : r++; // 若存在，则删除；否则可递增
     } // assert: 循环过程中的任意时刻，p的所有前驱互不相同
@@ -181,21 +199,49 @@ Posi(T) List<T>::search(T const & e, Rank n, Posi(T) p) const{ //有序列表，
     return p;
 }
 
+template <typename T>
+void List<T>::selectionSort(Posi(T) p, int n){ // 对列表中起始于位置p的连续n个元素做选择排序
+    Posi(T) head = p->pred; Posi(T) trail = p; // 待排区间(head, tail)
+    for(int i=0; i<n; i++) trail = trail->succ;
+    while(1 < n){
+        insertBefore(trail, remove(selectMax(head->succ, n)));
+        trail = trail->pred; n--;
+    }
+}
 
-// 测试
+
+
+
+/*******************************************************
+* 测试
+*******************************************************/ 
 int main(){
 
-   List<int> listTest1;
-   listTest1.init(); //初始化，创建header和trailer
+    List<int> listTest1;
+    listTest1.init(); //初始化，创建header和trailer
 
-   const int NUM = 10;
-   int elem;
-   for(int i=0; i<NUM; i++){
-      elem = rand()%100;
-      cout << "*" << elem << "*";
-      listTest1.insertAsLast(elem);
-   }    
-   cout << endl;
+    const int NUM = 15;
+    int elem;
+    for(int i=0; i<NUM; i++){
+        elem = rand()%10;
+        cout << "*" << elem << "*";
+        listTest1.insertAsLast(elem);
+    }    
+    cout << endl;
+
+    Posi(int) listNodeFirst = listTest1.first();
+    Posi(int) listNodeLast = listTest1.last();
+    cout << "First Node's data is " << listNodeFirst->data;
+    cout << "; Second Node's data is " << (listNodeFirst->succ)->data;
+    cout << "; Last Node's data is " << listNodeLast->data << endl;
+
+    int dupNum = listTest1.deduplicate();
+    Posi(int) p = listTest1.first();
+    for(int i=0; i<NUM-dupNum; i++){
+        cout << "*" << p->data << "*";
+        p = p->succ;
+    }
+    cout << " dupNum is " << dupNum << endl;
 
 }
 
