@@ -24,6 +24,7 @@ struct ListNode{ //列表节点模板类(以双向链表形式实现)
 /********************member*****************/
 template <typename T>
 Posi(T) ListNode<T>::insertAsPred(T const& e){
+    // new操作要花费100倍的时间
     Posi(T) x = new ListNode(e, pred, this); // 新建一个节点，新节点的pred是this的pred，新节点的succ是this
     pred->succ = x; // this的pred的succ变为新建节点x
     pred = x; // this的pred变为新建节点x
@@ -32,6 +33,7 @@ Posi(T) ListNode<T>::insertAsPred(T const& e){
 
 template <typename T>
 Posi(T) ListNode<T>::insertAsSucc(T const& e){
+    // new操作要花费100倍的时间
     Posi(T) x = new ListNode(e, this, succ); // 创建节点的耗时较大
     succ->pred = x;
     succ = x;
@@ -70,6 +72,7 @@ public:
     int uniquify(); // 有序向量，成批剔除重复元素
     Posi(T) search(T const & e, Rank n, Posi(T) p) const; // 有序列表，p的前n个(真)前驱中，找到不大于e的最后者
     void selectionSort(Posi(T) p, int n); // 对列表中起始于位置p的连续n个元素做选择排序
+    void insertionSort(Posi(T) p, int n); // 对列表中起始于位置p的连续n个元素做选择排序
 };
 
 /********************member*****************/
@@ -147,10 +150,11 @@ T List<T>::remove(Posi(T) p){
     T e = p->data;
     p->pred->succ = p->succ;
     p->succ->pred = p->pred;
-    delete p; _size--; return e;
+    delete p; _size--;  // delete 100倍的时间复杂度
+    return e;
 }
 
-template <typename T>
+template <typename T> // painter's algorithm
 Posi(T) List<T>::selectMax(Posi(T) p, int n){ // 从起始于位置p 后 n个元素中选出最大者(包括p)
     Posi(T) max = p; //最大者暂定为首节点p
     for(Posi(T) curr = p; 1<n; n--){
@@ -209,6 +213,14 @@ void List<T>::selectionSort(Posi(T) p, int n){ // 对列表中起始于位置p�
     }
 }
 
+template <typename T>
+void List<T>::insertionSort(Posi(T) p, int n){ // 对列表中起始于位置p的连续n个元素做选择排序
+    for(int r=0; r<n; r++){
+        insertAfter(search(p->data, r, p), p->data);
+        p = p->succ; remove(p->pred); // 转向下一个节点
+    }
+} // in-place
+
 
 
 
@@ -237,11 +249,25 @@ int main(){
 
     int dupNum = listTest1.deduplicate();
     Posi(int) p = listTest1.first();
-    for(int i=0; i<NUM-dupNum; i++){
+    int leftNum = NUM-dupNum;
+    for(int i=0; i<leftNum; i++){
         cout << "*" << p->data << "*";
         p = p->succ;
     }
     cout << " dupNum is " << dupNum << endl;
+
+    p = listTest1.first();
+    listTest1.selectionSort(p, leftNum);
+    for(int i=0; i<leftNum; i++){
+        cout << "*" << p->data << "*";
+        p = p->succ;
+    }
+    cout << " Sorted List " << endl;
+
+    int target = 7;
+    Posi(int) tarPos = listTest1.search(target, leftNum, listTest1.last());
+    cout << "Target " << target << " is at " << tarPos << " where data is " << tarPos->data << endl;
+
 
 }
 
