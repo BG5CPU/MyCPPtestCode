@@ -13,12 +13,7 @@
 *********************************************************************************/ 
 
 #include <iostream>
-#include <stddef.h>
-#include <vector>
 using namespace std;
-
-
-
 
 /*******************************************************
 * 测试
@@ -39,12 +34,13 @@ int main(){
         scanf("%d %d", &Boun[i][0], &Boun[i][1]);
     
     // 存放结果的向量
-    vector<int> ans;
+    int ans = 0;
     for(int i=0; i<mLines; i++){
-        
+        for(int m=0; m<NUM; m++){
+            if((Boun[i][0]<=array[m]) && (array[m]<=Boun[i][1])) ++ans;
+        }
+        cout << ans << endl;
     }
-
-
 
     return 0;
 }
