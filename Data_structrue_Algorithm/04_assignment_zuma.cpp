@@ -26,6 +26,30 @@ using namespace std;
 * 测试
 *******************************************************/
 
+int isContinueTwo(string str, int pos, char col){
+    int strS = str.size();
+    if(pos == 0){
+        if( (str.at(0)==col) && (str.at(1)==col) ) return 0;
+        else return -1;
+    }else if(pos == strS){
+        if( (str.at(strS-1)==col) && (str.at(strS-2)==col) ) return strS-2;
+        else return -1;        
+    }else if(pos == 1){
+        if( (str.at(pos)==col) && (str.at(pos+1)==col) ) return pos;
+        else if( (str.at(pos-1)==col) && (str.at(pos)==col) ) return pos-1; 
+        else return -1;
+    }else if(pos == strS-1){
+        if( (str.at(pos-1)==col) && (str.at(pos)==col) ) return pos-1;
+        else if( (str.at(pos-2)==col) && (str.at(pos-1)==col) ) return pos-2;
+        else return -1;
+    }else{
+        if( (str.at(pos)==col) && (str.at(pos+1)==col) ) return pos;
+        else if( (str.at(pos-1)==col) && (str.at(pos)==col) ) return pos-1;
+        else if( (str.at(pos-2)==col) && (str.at(pos-1)==col) ) return pos-2;
+        else return -1;
+    }
+}
+
 int main(){
 
     string str;
@@ -38,8 +62,7 @@ int main(){
     char color;
     while(nLines--){
         scanf("%d %c",&po, &color);
-        
-
+        cout << isContinueTwo(str, po, color) << endl;
     }
 
     return 0;
