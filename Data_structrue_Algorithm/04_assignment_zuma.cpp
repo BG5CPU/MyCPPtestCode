@@ -50,6 +50,14 @@ int isContinueTwo(string str, int pos, char col){
     }
 }
 
+int isContinueThree(string str, int pos, int nLoop){
+    if(pos == 0) return 0;
+    else if(pos == 1){
+        if( (str.at(0) == str.at(1)) )
+    }
+    
+}
+
 int main(){
 
     string str;
@@ -58,11 +66,12 @@ int main(){
     int nLines;
     scanf("%d", &nLines);
 
-    int po;
+    int posti;
     char color;
     while(nLines--){
-        scanf("%d %c",&po, &color);
-        cout << isContinueTwo(str, po, color) << endl;
+        scanf("%d %c",&posti, &color);
+        cout << isContinueTwo(str, posti, color) << endl;
+        
     }
 
     return 0;
