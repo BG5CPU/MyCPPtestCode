@@ -1,6 +1,11 @@
 /********************************************************************************
 * describe
 * Let's play the game Zuma! 
+* There are a sequence of beads on a track at the right beginning. 
+* All the beads are colored but no three adjacent ones are allowed to be with a same color. 
+* You can then insert beads one by one into the sequence. 
+* Once three (or more) beads with a same color become adjacent due to an insertion, 
+* they will vanish immediately.
 * Input:
 * ACCBA
 * 5
@@ -50,12 +55,40 @@ int isContinueTwo(string str, int pos, char col){
     }
 }
 
-int isContinueThree(string str, int pos, int nLoop){
-    if(pos == 0) return 0;
-    else if(pos == 1){
-        if( (str.at(0) == str.at(1)) )
-    }
+int *Continue3or4(string str, int pos, int space){
+    // space从2开始
+    int p1, p2, l1, l2;
+    p1 = pos-1; p2 = pos-2;
+    l1 = pos+space; l2 = pos+space+1;
+    int strS = str.size();
+
+    int ppos = -1, sspace = 0;
+    static int returnA[2];
     
+    if(p1 == -1) ppos = -1;
+    if(l1 == strS) ppos = -1;
+    if(p2 == -1 && l2 == strS) ppos = -1;
+
+    if(p2 == -1 && l2 < strS){
+        if( (str.at(p1) == str.at(l1)) && (str.at(p1) == str.at(l2)) ){
+            ppos = p1; sspace = 3;
+        }else ppos = -1;
+    }else if(p2 > -1 && l2 == strS){
+        if( (str.at(p1) == str.at(l1)) && (str.at(p2) == str.at(l1)) ){
+            ppos = p2; sspace = 3;
+        }else ppos = -1;
+    }else{
+        if( (str.at(p2) == str.at(p1)) && (str.at(p2) == str.at(l1)) && (str.at(p2) == str.at(l2)) ){
+            ppos = p2; sspace = 4;
+        }else if( (str.at(p2) == str.at(p1)) && (str.at(p2) == str.at(l1)) ){
+            ppos = p2; sspace = 3;
+        }else if( (str.at(p1) == str.at(l1)) && (str.at(p1) == str.at(l2)) ){
+            ppos = p1; sspace = 3;
+        }else ppos = -1;
+    }
+
+    returnA[0] = ppos; returnA[1] == sspace;
+    return returnA;
 }
 
 int main(){
