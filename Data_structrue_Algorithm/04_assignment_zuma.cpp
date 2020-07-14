@@ -63,11 +63,11 @@ int *Continue3or4(string str, int pos, int space){
     int strS = str.size();
 
     int ppos = -1, sspace = 0;
-    static int returnA[2];
+    static int returnA[2] = {ppos, sspace};
     
-    if(p1 == -1) ppos = -1;
-    if(l1 == strS) ppos = -1;
-    if(p2 == -1 && l2 == strS) ppos = -1;
+    if(p1 == -1) return returnA;
+    if(l1 == strS) return returnA;
+    if(p2 == -1 && l2 == strS) return returnA;
 
     if(p2 == -1 && l2 < strS){
         if( (str.at(p1) == str.at(l1)) && (str.at(p1) == str.at(l2)) ){
@@ -87,7 +87,7 @@ int *Continue3or4(string str, int pos, int space){
         }else ppos = -1;
     }
 
-    returnA[0] = ppos; returnA[1] == sspace;
+    returnA[0] = ppos; returnA[1] = sspace;
     return returnA;
 }
 
@@ -96,6 +96,27 @@ int main(){
     string str;
     cin >> str;
 
+//    int posti, space;
+//    scanf("%d %d",&posti, &space);
+    
+    int posti; char color;
+    scanf("%d %c",&posti, &color);
+
+    int *ret; int space;
+    *ret = isContinueTwo(str, posti, color);
+    *(ret+1) = 2; space = 2;
+
+    while(ret[0] != -1){
+        ret = Continue3or4(str, *ret, space);
+        space = space+*(ret+1);   
+        cout << "pos is " << ret[0] << " and spa is " << space;
+        cout << endl;    
+    }
+
+//    cout << "pos is " << ret[0] << " and spa is " << ret[1] << endl;
+ 
+
+/*
     int nLines;
     scanf("%d", &nLines);
 
@@ -106,7 +127,8 @@ int main(){
         cout << isContinueTwo(str, posti, color) << endl;
         
     }
-
+*/
+    
     return 0;
 }
 
