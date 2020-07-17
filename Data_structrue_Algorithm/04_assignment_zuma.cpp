@@ -56,6 +56,8 @@ int isContinueTwo(string str, int pos, char col){
 }
 
 int *Continue3or4(string str, int pos, int space){
+    cout << "Continue3or4--" << str << "--" << pos << "--" << space;
+    cout << endl;
     // space从2开始
     int p1, p2, l1, l2;
     p1 = pos-1; p2 = pos-2;
@@ -63,7 +65,8 @@ int *Continue3or4(string str, int pos, int space){
     int strS = str.size();
 
     int ppos = -1, sspace = 0;
-    static int returnA[2] = {ppos, sspace};
+    static int returnA[2];
+    returnA[0] = ppos; returnA[1] = sspace;
     
     if(p1 == -1) return returnA;
     if(l1 == strS) return returnA;
@@ -88,6 +91,8 @@ int *Continue3or4(string str, int pos, int space){
     }
 
     returnA[0] = ppos; returnA[1] = sspace;
+    cout << "Continue3or4RETURN--" << ppos << "--" << sspace;
+    cout << endl;
     return returnA;
 }
 
@@ -102,14 +107,15 @@ int main(){
     int posti; char color;
     scanf("%d %c",&posti, &color);
 
-    int *ret; int space;
-    *ret = isContinueTwo(str, posti, color);
-    *(ret+1) = 2; space = 2;
-
-    while(ret[0] != -1){
-        ret = Continue3or4(str, *ret, space);
-        space = space+*(ret+1);   
-        cout << "pos is " << ret[0] << " and spa is " << space;
+    int pos2, space = 2;
+    pos2 = isContinueTwo(str, posti, color);
+    
+    int *ret;
+    while(pos2 != -1){
+        ret = Continue3or4(str, pos2, space);
+        pos2 = ret[0];
+        space = space+ret[1];   
+        cout << "pos is " << pos2 << " and spa is " << space;
         cout << endl;    
     }
 
